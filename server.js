@@ -4,12 +4,13 @@ const path = require('path');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
+//Static Files; might not need this
 app.use('/', express.static(path.join(__dirname, '/public')));
 
 
 //routes
 app.use('/', require('./routes/root'));
-app.use('/states', require('./routes/root'));
+app.use('/states', require('./routes/api/states'));
 
 app.all('*', (req, res) => {
     res.status(404);

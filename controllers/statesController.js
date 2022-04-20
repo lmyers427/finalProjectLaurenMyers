@@ -7,9 +7,9 @@ const data = {
     setStates: function(data) {this.states = data}
 }
 
-const getallStates = (req, res) => {
+const getAllStates = (req, res) => {
 
-    req.json(data.states);
+    res.json(data.states);
 }
 //Create Update and Delete are MongoDB
 
@@ -17,14 +17,73 @@ const getallStates = (req, res) => {
 //Json Data and MongoDB(add later)
 const getState = (req, res) => {
 
-    const state = data.states.find(st => st.code === JSON.stringify(req.params.code));
+    const state = data.states.find(st => st.code === req.params.state.toUpperCase());
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.code} not found`});
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
     }
     res.json(state);
 }
 
+const getStateCapital = (req, res) => {
+
+    const state = data.states.find(st => st.code === req.params.state.toUpperCase());
+    if(!state) {
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+    }
+
+    res.json({'state': `${state.state}`, 'capital': `${state.capital_city}`});
+}
+
+const getStateNickName = (req, res) => {
+
+    const state = data.states.find(st => st.code === req.params.state.toUpperCase());
+    if(!state) {
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+    }
+
+    res.json({'state': `${state.state}`, 'nickname': `${state.nickname}`});
+}
+
+const getStatePopulation = (req, res) => {
+
+    const state = data.states.find(st => st.code === req.params.state.toUpperCase());
+    if(!state) {
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+    }
+
+    res.json({'state': `${state.state}`, 'population': `${state.population}`});
+}
+const getStateAdmission = (req, res) => {
+
+    const state = data.states.find(st => st.code === req.params.state.toUpperCase());
+    if(!state) {
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+    }
+
+    res.json({'state': `${state.state}`, 'admitted': `${state.admission_date}`});
+}
+//Not sure why these aren't working 
+const getAllContigStates = (req, res) => {
+
+    const contigStates = data.states.filter((st) =>{return st.admission_number === parseInt(50)});
+    res.json(contigStates);
+} 
+
+const getAllNonContigStates = (req, res) => {
+
+    const nonContigStates = data.states.filter((st) => {return st.admission_number === 50 || 49});
+    res.json(nonContigStates);
+}
+
+
+
 module.exports = {
     getAllStates,
-    getState
+    getState,
+    getStateCapital,
+    getStateNickName,
+    getStatePopulation,
+    getStateAdmission,
+    getAllContigStates,
+    getAllNonContigStates
 }
