@@ -1,0 +1,4 @@
+#Remove node_modules from project
+node_modules
+#Remove .env file from project
+.env
