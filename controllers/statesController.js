@@ -1,11 +1,13 @@
 const { json } = require('body-parser');
 
-//const StateCode = require('../model/config/States');
+const stateFunFact = require('../model/config/States');
+
 const data = {
 
     states: require('../model/states.json'),
     setStates: function(data) {this.states = data}
 }
+const State = require('../model/config/States');
 
 const getAllStates = (req, res) => {
 
@@ -76,6 +78,30 @@ const getAllNonContigStates = (req, res) => {
 }
 
 
+const createNewFunFact = async (req, res) =>  {
+
+    try {
+        //create and store new funfact
+    
+        const result = await State.create({
+            
+            "stateCode": req.body.stateCode,
+            "funfacts": req.body.funfacts
+    
+        });
+    
+        console.log(result);
+    
+    
+        res.status(201).json({ 'success': `New fun fact created for State Code: ${code}`});
+    } catch (err){
+    
+        res.status(500).json({'message': err.message });
+    }
+    
+    }
+
+
 
 module.exports = {
     getAllStates,
@@ -85,5 +111,6 @@ module.exports = {
     getStatePopulation,
     getStateAdmission,
     getAllContigStates,
-    getAllNonContigStates
+    getAllNonContigStates,
+    createNewFunFact
 }

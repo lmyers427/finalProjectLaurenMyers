@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const statesController = require('../../controllers/statesController');
 
+
 //All state data returned
 router.route('/')
     .get(statesController.getAllStates);
@@ -48,7 +49,7 @@ router.route('/:state/funfact')
 
 //Post, Patch, Delete requests
 router.route('/:state/funfact')
-    .post()
+    .post(statesController.createNewFunFact)
     .patch()
     .delete()
 
