@@ -3,6 +3,11 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
+const mongoose = require('mongoose');
+const connectDB = require('./model/config/dbConn');
+
+//Connect to MongoDb
+connectDB();
 
 //Static Files; might not need this
 app.use('/', express.static(path.join(__dirname, '/public')));
@@ -23,5 +28,9 @@ app.all('*', (req, res) => {
     }
 });
 
+mongoose.connection.once('open', () => {
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    console.log('Connected to MongoDB');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
