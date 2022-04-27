@@ -1,29 +1,82 @@
 const { json } = require('body-parser');
 
-const stateFunFact = require('../model/config/States');
-
 const data = {
 
     states: require('../model/states.json'),
     setStates: function(data) {this.states = data}
 }
-const State = require('../model/config/States');
+const States = require('../model/config/States');
 
-const getAllStates = (req, res) => {
+const getAllStates = async (req, res) => {
 
-    res.json(data.states);
+    if(req.params.contig === false){
+
+        const jsonStates = data.states.find(con => con.state === 'AL');
+
+
+    }
+    else if(req.params.contig === true){
+
+        const jsonStates = data.states.find(con => con.state === 'CA' );
+    }
+    
+    const jsonStates = data.states;
+
+
+    const states = await States.find();
+
+   //const states = await States.findOne({stateCode:'OK'}, 'funfacts');
+    if (!states || !jsonStates) return res.status(204).json({ 'message': 'No states found' });
+   
+    //take the json data and loop through it to find the first item 
+
+    const newArr = []
+
+    jsonStates.forEach((item) =>{
+    
+    const checkState = states.find(element => element.stateCode === item.code);
+    if(!checkState){
+
+    item.funfacts = [];
+    }
+    else{
+
+    item.funfacts = checkState.funfacts;
+
+    }
+    newArr.push(item);
+    });
+    
+    res.json(newArr);
+
+   
 }
 //Create Update and Delete are MongoDB
 
 
-//Json Data and MongoDB(add later)
-const getState = (req, res) => {
+//Json Data and MongoDB
+const getState = async (req, res) => {
+
+    const states = await States.find();
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase());
     if(!state) {
         return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
     }
+
+    const checkState = states.find(element => element.stateCode === state.code);
+  
+    if(!checkState){
+
+    state.funfacts = [];
+    }
+    else{
+
+    state.funfacts = checkState.funfacts;
+    }
+   
     res.json(state);
+
 }
 
 const getStateCapital = (req, res) => {
