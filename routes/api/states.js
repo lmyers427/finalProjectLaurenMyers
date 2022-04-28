@@ -33,16 +33,6 @@ router.route('/:state/population')
 router.route('/:state/admission')
 .get(statesController.getStateAdmission);
 
-//All state data for contiguous states (Not AK or HI)
-router.route('/?contig=true')
-    .get(statesController.getAllContigStates);
-
-//All state data for non-contiguous states (AK, HI)
-
-router.route('/?contig=false')
-    .get(statesController.getAllNonContigStates);
-   
-
 //A random fun fact for the state URL
 router.route('/:state/funfact')
     .get();
