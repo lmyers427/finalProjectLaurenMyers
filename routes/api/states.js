@@ -35,12 +35,12 @@ router.route('/:state/admission')
 
 //A random fun fact for the state URL
 router.route('/:state/funfact')
-    .get();
+    .get(statesController.getRandomFunfact);
 
 //Post, Patch, Delete requests
 router.route('/:state/funfact')
     .post(statesController.createNewFunFact)
     .patch(statesController.updateExistingFunfacts)
-    .delete()
+    .delete(statesController.deleteFunfact)
 
 module.exports = router;

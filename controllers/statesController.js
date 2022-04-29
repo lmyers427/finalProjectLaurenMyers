@@ -9,6 +9,7 @@ const States = require('../model/config/States');
 
 const verifyStateCode = require('../middleware/verifyStateCode');
 const req = require('express/lib/request');
+const res = require('express/lib/response');
 
 const getAllStates = async (req, res) => {
 
@@ -119,7 +120,7 @@ const createNewFunFact = async (req, res) =>  {
     
     }
 
-//Update and Delete MongoDB
+//Update MongoDB
 
 const updateExistingFunfacts = async (req, res) => {
    
@@ -129,7 +130,6 @@ const { index, funfact } = req.body;
 const state = await States.findOne({stateCode: `${req.params.state.toUpperCase()}`}); 
 
 const checkIndex = state.funfacts[index];
-console.log(checkIndex);
 
 if(!index|| !funfact) return res.status(400).json({'message': 'index and funfact are required.'});
 
@@ -150,6 +150,35 @@ else {
 
 }
 
+//Delete MongoDB Not working Need to solve 
+const deleteFunfact = async (req, res) => {
+
+const { index } = req.body;
+
+const state = await States.findOne({stateCode: `${req.params.state.toUpperCase()}`}); 
+
+const checkIndex = state.funfacts[index];
+
+if(!index) return res.status(400).json({'message': 'Index of Funfact Required'});
+
+else if(!state) return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+  
+else if(!checkIndex) return res.status(400).json({"message": `Funfact Index not found`}); 
+
+else{
+
+    const result = await States.updateOne({stateCode: req.params.state}, {
+
+        $pull: {
+            funfact: checkIndex
+        }
+    });
+
+    res.json(result);
+}
+
+
+}
 
 //Json Data and MongoDB
 const getState = async (req, res) => {
@@ -175,6 +204,37 @@ const getState = async (req, res) => {
     res.json(state);
 
 }
+
+const getRandomFunfact = async (req, res) => {
+
+
+    const states = await States.find();
+
+    const state = data.states.find(st => st.code === req.params.state.toUpperCase()); 
+    if(!state) {
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+    }
+
+    const checkState = states.find(element => element.stateCode === state.code);
+  
+    if(!checkState){
+
+        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} does not have any funfacts`});
+   
+    }
+    
+
+    randArr = checkState.funfacts[Math.floor(Math.random()*checkState.funfacts.length)];
+    
+   
+    res.json({'funfacts' : `${randArr}`});
+
+    
+
+}
+
+
+
 
 const getStateCapital = (req, res) => {
 
@@ -227,5 +287,7 @@ module.exports = {
     getStatePopulation,
     getStateAdmission,
     createNewFunFact,
-    updateExistingFunfacts
+    updateExistingFunfacts,
+    deleteFunfact,
+    getRandomFunfact
 }
