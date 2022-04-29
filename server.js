@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
+const corsOptions = require('./model/config/corsOptions');
+const credentials = require('./middleware/credentials');
 const dotenv = require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
@@ -10,6 +12,15 @@ const connectDB = require('./model/config/dbConn');
 //Connect to MongoDb
 connectDB();
 
+//Creditials MiddleWare
+app.use(credentials);
+
+//CORS
+app.use(cors(corsOptions));
+
+//Built in middleware for json
+app.use(express.json());
+
 //Static Files; might not need this
 app.use('/', express.static(path.join(__dirname, '/public')));
 
@@ -17,7 +28,6 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 //routes
 app.use('/', require('./routes/root'));
 app.use('/states', require('./routes/api/states'));
-
 
 app.all('*', (req, res) => {
     res.status(404);

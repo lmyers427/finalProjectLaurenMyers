@@ -69,12 +69,15 @@ const getAllStates = async (req, res) => {
 
 const createNewFunFact = async (req, res) =>  {
 
+    const funfacts = req.body;
+    console.log(req.body);
+
     try {
         //create and store new funfact
     
-        const result = await State.create({
+        const result = await States.create({
             
-            "stateCode": req.body.stateCode,
+            "stateCode": req.params.state,
             "funfacts": req.body.funfacts
     
         });
