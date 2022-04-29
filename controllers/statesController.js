@@ -8,6 +8,7 @@ const data = {
 const States = require('../model/config/States');
 
 const verifyStateCode = require('../middleware/verifyStateCode');
+const req = require('express/lib/request');
 
 const getAllStates = async (req, res) => {
 
@@ -65,12 +66,36 @@ const getAllStates = async (req, res) => {
 
    
 }
-//Create Update and Delete are MongoDB
+//Create MongoDB funfact(s)
 
 const createNewFunFact = async (req, res) =>  {
 
-    const funfacts = req.body;
-    console.log(req.body);
+    const { funfacts } = req.body;
+
+    const duplicate = await States.findOne({stateCode: req.params.state}).exec();
+    if(duplicate)
+    {
+        try {
+
+            const result = await States.updateOne(
+                
+            {   stateCode: req.params.state },
+
+            {$push: {funfacts: funfacts}  },
+        
+            );
+            
+            res.status(201).json({ 'success': `New fun fact created for State Code: ${req.params.state}`});
+   
+
+        }
+        catch (err){
+    
+            res.status(500).json({'message': err.message });
+        }
+
+    }
+    else{
 
     try {
         //create and store new funfact
@@ -78,7 +103,7 @@ const createNewFunFact = async (req, res) =>  {
         const result = await States.create({
             
             "stateCode": req.params.state,
-            "funfacts": req.body.funfacts
+            "funfacts": funfacts
     
         });
     
@@ -90,8 +115,36 @@ const createNewFunFact = async (req, res) =>  {
     
         res.status(500).json({'message': err.message });
     }
+    }
     
     }
+
+//Update and Delete MongoDB
+
+const updateExistingFunfacts = async (req, res) => {
+   
+
+const { index, funfact } = req.body;
+
+const checkState = await States.findOne({stateCode: `${req.params.state.toUpperCase()}`}); 
+
+const checkIndex = checkState.funfacts[index];
+console.log(checkIndex);
+
+if(!index|| !funfact) return res.status(400).json({'message': 'index and funfact are required.'});
+
+else if(!checkState) return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+  
+else if(!checkIndex) return res.status(400).json({"message": `Funfact Index not found`}); 
+
+else {
+
+ console.log("successfully made it here");
+
+}
+
+
+}
 
 
 //Json Data and MongoDB
@@ -169,5 +222,6 @@ module.exports = {
     getStateNickName,
     getStatePopulation,
     getStateAdmission,
-    createNewFunFact
+    createNewFunFact,
+    updateExistingFunfacts
 }

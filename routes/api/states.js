@@ -40,7 +40,7 @@ router.route('/:state/funfact')
 //Post, Patch, Delete requests
 router.route('/:state/funfact')
     .post(statesController.createNewFunFact)
-    .patch()
+    .patch(statesController.updateExistingFunfacts)
     .delete()
 
 module.exports = router;
