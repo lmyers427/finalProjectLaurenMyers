@@ -165,12 +165,13 @@ else if(!state) return res.status(400).json({"message": `State Code ${req.params
   
 else if(!checkIndex) return res.status(400).json({"message": `Funfact Index not found`}); 
 
+
 else{
 
     const result = await States.updateOne({stateCode: req.params.state}, {
 
         $pull: {
-            funfact: checkIndex
+            funfacts: checkIndex
         }
     });
 
