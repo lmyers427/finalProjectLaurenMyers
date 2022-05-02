@@ -262,7 +262,7 @@ const getStatePopulation = (req, res) => {
         return res.status(400).json({"message": `Invalid state abbreviation parameter`});
     }
 
-    res.json({'state': `${state.state}`, 'population': `${state.population}`});
+    res.json({'state': `${state.state}`, 'population': `${state.population.toLocaleString()}`});
 }
 const getStateAdmission = (req, res) => {
 
