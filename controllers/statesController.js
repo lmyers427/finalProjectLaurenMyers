@@ -187,7 +187,7 @@ const getState = async (req, res) => {
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase()); 
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+        return res.status(400).json({"message": `Invalid state abbreviation parameter`});
     }
 
     const checkState = states.find(element => element.stateCode === state.code);
