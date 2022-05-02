@@ -50,7 +50,6 @@ const getAllStates = async (req, res) => {
     const checkState = states.find(element => element.stateCode === item.code);
     if(!checkState){
 
-    item.funfacts = [];
     }
     else{
 
@@ -195,7 +194,6 @@ const getState = async (req, res) => {
   
     if(!checkState){
 
-    state.funfacts = [];
     }
     else{
 
