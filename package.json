@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/lmyers427/finalProjectLaurenMyers#readme",
   "dependencies": {
+    "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.3.0"
   },
-
   "engines": {
     "node": "14.x"
   },
