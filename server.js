@@ -16,7 +16,7 @@ connectDB();
 app.use(credentials);
 
 //CORS
-app.use(cors(corsOptions));
+app.use(cors());
 
 //Built in middleware for json
 app.use(express.json());
