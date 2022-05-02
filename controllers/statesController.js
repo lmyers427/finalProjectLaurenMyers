@@ -211,14 +211,14 @@ const getRandomFunfact = async (req, res) => {
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase()); 
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
-    }
+        return res.status(400).json({"message": `Invalid state abbreviation parameter`});
+   }
 
     const checkState = states.find(element => element.stateCode === state.code);
   
     if(!checkState){
 
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} does not have any funfacts`});
+        return res.status(400).json({"message": `No Fun Facts found for ${state.state}`});
    
     }
     
@@ -239,7 +239,7 @@ const getStateCapital = (req, res) => {
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase());
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+        return res.status(400).json({"message": `Invalid state abbreviation parameter`});
     }
 
     res.json({'state': `${state.state}`, 'capital': `${state.capital_city}`});
@@ -249,7 +249,7 @@ const getStateNickName = (req, res) => {
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase());
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+        return res.status(400).json({"message": `Invalid state abbreviation parameter`});
     }
 
     res.json({'state': `${state.state}`, 'nickname': `${state.nickname}`});
@@ -259,7 +259,7 @@ const getStatePopulation = (req, res) => {
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase());
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
+        return res.status(400).json({"message": `Invalid state abbreviation parameter`});
     }
 
     res.json({'state': `${state.state}`, 'population': `${state.population}`});
@@ -268,8 +268,8 @@ const getStateAdmission = (req, res) => {
 
     const state = data.states.find(st => st.code === req.params.state.toUpperCase());
     if(!state) {
-        return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
-    }
+        return res.status(400).json({"message": `Invalid state abbreviation parameter`});
+   }
 
     res.json({'state': `${state.state}`, 'admitted': `${state.admission_date}`});
 }
