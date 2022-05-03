@@ -133,10 +133,7 @@ const { index, funfact } = req.body;
 
 const stateNM = data.states.find(st => st.code === req.params.state.toUpperCase()); 
   
-
 const state = await States.findOne({stateCode: `${req.params.state.toUpperCase()}`}); 
-
-const checkIndex = state.funfacts[index-1];
 
 if(!index) return res.status(400).json({'message': 'State fun fact index value required'});
 
@@ -144,17 +141,20 @@ else if(!funfact || typeof funfact != 'string') return res.status(400).json({'me
 
 else if(!state) return res.status(400).json({"message": `No Fun Facts found for ${stateNM.state}`});
   
-else if(!checkIndex) return res.status(400).json({"message": `No Fun Fact found at that index for ${stateNM.state}`}); 
-
 else {
 
+  const checkIndex = state.funfacts[index-1];
+
+  if(!checkIndex) return res.status(400).json({"message": `No Fun Fact found at that index for ${stateNM.state}`}); 
+
+    else{
   state.funfacts[index-1] = funfact;
 
  // console.log(state.funfacts[index-1]);
   const result = await state.save();
 
   res.json(result);
-
+    }
 }
 
 }
