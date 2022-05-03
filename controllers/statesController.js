@@ -72,6 +72,11 @@ const createNewFunFact = async (req, res) =>  {
 
     const { funfacts } = req.body;
 
+    if(!funfacts) return res.status(400).json({'message': 'State fun facts value required'});
+
+    else if(!Array.isArray(funfacts)) return res.status(400).json({'message': 'State fun facts value must be an array'});
+
+
     const duplicate = await States.findOne({stateCode: req.params.state}).exec();
     if(duplicate)
     {
@@ -85,7 +90,7 @@ const createNewFunFact = async (req, res) =>  {
         
             );
             
-            res.status(201).json({ 'success': `New fun fact created for State Code: ${req.params.state}`});
+            res.status(201).json(result);
    
 
         }
@@ -107,10 +112,10 @@ const createNewFunFact = async (req, res) =>  {
     
         });
     
-        console.log(result);
+        
     
     
-        res.status(201).json({ 'success': `New fun fact created for State Code: ${code}`});
+        res.status(201).json(result);
     } catch (err){
     
         res.status(500).json({'message': err.message });
