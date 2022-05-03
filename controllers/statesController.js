@@ -226,7 +226,7 @@ const getRandomFunfact = async (req, res) => {
     randArr = checkState.funfacts[Math.floor(Math.random()*checkState.funfacts.length)];
     
    
-    res.json({'funfacts' : `${randArr}`});
+    res.json({'funfact' : `${randArr}`});
 
     
 
