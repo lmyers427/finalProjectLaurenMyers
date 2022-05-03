@@ -80,7 +80,6 @@ const createNewFunFact = async (req, res) =>  {
     const duplicate = await States.findOne({stateCode: req.params.state}).exec();
     if(duplicate)
     {
-        try {
 
             const result = await States.updateOne(
                 
@@ -89,15 +88,12 @@ const createNewFunFact = async (req, res) =>  {
             {$push: {funfacts: funfacts}  },
         
             );
+
             
-            res.status(201).json(result);
+            res.json(result);
    
 
-        }
-        catch (err){
-    
-            res.status(500).json({'message': err.message });
-        }
+
 
     }
     else{
