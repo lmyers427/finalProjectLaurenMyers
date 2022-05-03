@@ -77,48 +77,42 @@ const createNewFunFact = async (req, res) =>  {
     else if(!Array.isArray(funfacts)) return res.status(400).json({'message': 'State fun facts value must be an array'});
 
 
-    const duplicate = await States.findOne({stateCode: req.params.state}).exec();
-    if(duplicate)
+    const state = await States.findOne({stateCode: req.params.state}).exec();
+    if(state)
     {
 
-            const result = await States.updateOne(
-                
-            {   stateCode: req.params.state },
 
-            {$push: {funfacts: funfacts}  },
+       let arr = state.funfacts; 
+
+       funfacts.forEach(elem => {
+
+        arr.push(elem);
+
+       });
+
+       state.funfacts = arr; 
+
+       const result = await state.save();
+
+       res.json(result);
         
-            );
-
-            
-            res.json(result);
-   
-
-
-
     }
     else{
-
-    try {
         //create and store new funfact
     
-        const result = await States.create({
+           const newState = new States({
+               "stateCode": req.params.state,
+               "funfacts": funfacts
+           });
+
+           const result = await States.save();
             
-            "stateCode": req.params.state,
-            "funfacts": funfacts
-    
-        });
-    
-        
-    
-    
-        res.status(201).json(result);
-    } catch (err){
-    
-        res.status(500).json({'message': err.message });
-    }
-    }
+            res.json(result);
+
     
     }
+    
+}
 
 //Update MongoDB
 
