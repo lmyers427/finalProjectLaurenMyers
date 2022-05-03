@@ -164,19 +164,22 @@ const deleteFunfact = async (req, res) => {
 
 const { index } = req.body;
 
+const stateNM = data.states.find(st => st.code === req.params.state.toUpperCase()); 
+
 const state = await States.findOne({stateCode: `${req.params.state.toUpperCase()}`}); 
 
-const checkIndex = state.funfacts[index];
+if(!index) return res.status(400).json({'message': 'State fun fact index value required'});
 
-if(!index) return res.status(400).json({'message': 'Index of Funfact Required'});
-
-else if(!state) return res.status(400).json({"message": `State Code ${req.params.state.toUpperCase()} not found`});
-  
-else if(!checkIndex) return res.status(400).json({"message": `Funfact Index not found`}); 
+else if(!state) return res.status(400).json({"message": `No Fun Facts found for ${stateNM.state}`});
 
 
 else{
 
+    const checkIndex = state.funfacts[index-1];
+
+     if(!checkIndex) return res.status(400).json({"message": `No Fun Fact found at that index for ${stateNM.state}`}); 
+
+    else{
     const result = await States.updateOne({stateCode: req.params.state}, {
 
         $pull: {
@@ -185,6 +188,7 @@ else{
     });
 
     res.json(result);
+}
 }
 
 
