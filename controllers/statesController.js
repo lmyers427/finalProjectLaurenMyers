@@ -150,7 +150,6 @@ else {
     else{
   state.funfacts[index-1] = funfact;
 
- // console.log(state.funfacts[index-1]);
   const result = await state.save();
 
   res.json(result);
@@ -180,14 +179,16 @@ else{
      if(!checkIndex) return res.status(400).json({"message": `No Fun Fact found at that index for ${stateNM.state}`}); 
 
     else{
-    const result = await States.updateOne({stateCode: req.params.state}, {
 
-        $pull: {
-            funfacts: checkIndex
-        }
+  const newArr = state.funfacts.filter(st => {
+        return st != checkIndex
     });
 
-    res.json(result);
+    state.funfacts = newArr;
+
+    const result = await state.save();
+
+   res.json(result);
 }
 }
 
