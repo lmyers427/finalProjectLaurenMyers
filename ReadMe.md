@@ -1,4 +1,4 @@
-# "Lauren Myers Final Project"
+# "Lauren Myers Final Project STATES PROJECT API"
 
 **https://lacy-adaptable-society.glitch.me/**
 
